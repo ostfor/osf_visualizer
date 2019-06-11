@@ -12,5 +12,6 @@ setup(name='osf_visualizer',
       author='Denis Brailovsky',
       author_email='denis.brailovsky@gmail.com',
       license='MIT',
+      data_files=[('', ['LICENSE', 'CHANGELOG.md'])],
       packages=["osf_visualizer.{}".format(pkg) for pkg in find_packages("osf_visualizer")] + ["osf_visualizer"],
       zip_safe=False)
