@@ -38,7 +38,7 @@ class VisualizationProducer(object):
                  server=None, wait_time=None):
         self.__server = server
         self.__port = port
-        self.__items = items
+        self.__items = list(items)
         self.__experiment_name = experiment_name
         self.request_queue = queue.Queue(CAPACITY)
         self.should_send_to_visdom = True
@@ -48,7 +48,7 @@ class VisualizationProducer(object):
             self.__server = socket.gethostname()
 
         # Service
-        self.visdom_reporter = VisdomConsumer(port, self.__server, experiment_name, items, queue=self.request_queue, wait_time=wait_time)
+        self.visdom_reporter = VisdomConsumer(port, self.__server, experiment_name, self.__items, queue=self.request_queue, wait_time=wait_time)
         self.visdom_reporter.start()
 
         self.__epoch = 0
