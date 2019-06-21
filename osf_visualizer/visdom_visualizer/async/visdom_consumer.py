@@ -48,6 +48,7 @@ class VisdomConsumer(threading.Thread):
                 caption='Metrics',
                 xlabel='Iteration',
                 ylabel='Value',
+                update='append',
                 legend=self.items)
         )
 

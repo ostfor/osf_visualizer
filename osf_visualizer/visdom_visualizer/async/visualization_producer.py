@@ -22,7 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
-
 import queue
 import socket
 
@@ -48,7 +47,8 @@ class VisualizationProducer(object):
             self.__server = socket.gethostname()
 
         # Service
-        self.visdom_reporter = VisdomConsumer(port, self.__server, experiment_name, self.__items, queue=self.request_queue, wait_time=wait_time)
+        self.visdom_reporter = VisdomConsumer(port, self.__server, experiment_name, self.__items,
+                                              queue=self.request_queue, wait_time=wait_time)
         self.visdom_reporter.start()
 
         self.__epoch = 0
@@ -58,6 +58,20 @@ class VisualizationProducer(object):
     @property
     def visdom_url(self):
         return "{}:{}/env/{}".format(self.__server, self.__port, self.__experiment_name)
+
+    def vis_image(self, images, title="Test"):
+        if len(images[0].shape) == 2:
+            images = np.expand_dims(np.array(images), 1)
+        elif len(images[0].shape) == 3:
+            images = np.transpose(np.array(images), (0, 3, 1, 2))
+        self.visdom_reporter.viz.images(images,
+                                        env=self.visdom_reporter.title,
+                                        win=self.visdom_reporter.win,
+                                        opts=dict(
+                                            title=title,
+                                            caption=title + 'Images',
+                                            update='replace')
+                                        )
 
     def on_epoch_end(self, epoch, logs={}):
         iteration = epoch + self.__epoch
@@ -80,7 +94,3 @@ if __name__ == '__main__':
         cb = VisualizationProducer(["loss", "acc"], "Visman{}".format(i1), wait_time=10)
         for i in range(1, 100):
             cb.on_epoch_end(i, {"loss": 1.0 / i, "acc": 0.01 * i})
-
-
-
-
