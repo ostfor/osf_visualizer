@@ -6,6 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.0.1] - 2019-06-01
+## [0.0.3] - 2019-06-01
+
 ### Added
+
+- Hot fix: visualization win name
+
+## [0.0.2] - 2019-06-01
+
+### Added
+
+- Added visualization images
+
+## [0.0.1] - 2019-06-01
+
+### Added
+
 - Client-server visdom grafic drawer

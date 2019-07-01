@@ -66,13 +66,12 @@ class VisualizationProducer(object):
             images = np.transpose(np.array(images), (0, 3, 1, 2))
         self.visdom_reporter.viz.images(images,
                                         env=self.visdom_reporter.title,
-                                        win=self.visdom_reporter.win,
+                                        win=self.visdom_reporter.win + "img",
                                         opts=dict(
                                             title=title,
-                                            caption=title + 'Images',
-                                            update='replace')
+                                            caption=title + 'Images')
+                                        # update='replace')
                                         )
-
     def on_epoch_end(self, epoch, logs={}):
         iteration = epoch + self.__epoch
         if self.should_send_to_visdom and not self.request_queue.full():
