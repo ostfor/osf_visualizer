@@ -3,6 +3,7 @@ from setuptools import setup, find_packages
 with open('requirements.txt') as f:
     required = f.read().splitlines()
 
+scripts = ['osf_visualizer/scripts/visdom_load.py']
 setup(name='osf_visualizer',
       use_scm_version=True,
       setup_requires=['setuptools_scm'],
@@ -14,4 +15,6 @@ setup(name='osf_visualizer',
       license='MIT',
       data_files=[('', ['LICENSE', 'CHANGELOG.md'])],
       packages=["osf_visualizer.{}".format(pkg) for pkg in find_packages("osf_visualizer")] + ["osf_visualizer"],
+
+      scripts=scripts,
       zip_safe=False)

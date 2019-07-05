@@ -28,8 +28,10 @@ import socket
 import numpy as np
 
 from osf_visualizer.visdom_visualizer.async.visdom_consumer import VisdomConsumer
+from osf_visualizer.visdom_visualizer.helpers.visdom_loader import VisdomLoader
 
 CAPACITY = 1000000
+VISDOMBAK_TEMPLATE = "/tmp/{}.visdombak"
 
 
 class VisualizationProducer(object):
@@ -53,11 +55,19 @@ class VisualizationProducer(object):
 
         self.__epoch = 0
 
-        print("Visdom path: ", self.visdom_url)
+        print("Visdom path: http://", self.visdom_url)
 
     @property
     def visdom_url(self):
         return "{}:{}/env/{}".format(self.__server, self.__port, self.__experiment_name)
+
+    def visdom_checkpoint(self, path=None):
+        if path is None:
+            path = VISDOMBAK_TEMPLATE.format(self.__experiment_name)
+
+        loader = VisdomLoader(self.visdom_reporter.viz)
+        print("Save env {} to {}".format(self.__experiment_name, path))
+        loader.create_log_at(path, self.__experiment_name)
 
     def vis_image(self, images, title="Test"):
         if len(images[0].shape) == 2:
@@ -72,6 +82,7 @@ class VisualizationProducer(object):
                                             caption=title + 'Images')
                                         # update='replace')
                                         )
+
     def on_epoch_end(self, epoch, logs={}):
         iteration = epoch + self.__epoch
         if self.should_send_to_visdom and not self.request_queue.full():
